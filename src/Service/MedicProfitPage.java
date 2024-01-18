@@ -12,7 +12,7 @@ public class MedicProfitPage extends JFrame {
     private JTextField monthTextField;
     private JTextField yearTextField;
     private JButton calculateProfitButton;
-    private JButton backButton; // New back button
+    private JButton backButton;
 
     public MedicProfitPage() {
         initializeComponents();
@@ -24,7 +24,7 @@ public class MedicProfitPage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        contentPane = new JPanel(new GridLayout(5, 2, 10, 10)); // Increase rows to accommodate the new button
+        contentPane = new JPanel(new GridLayout(5, 2, 10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         medicIdTextField = new JTextField();
@@ -43,7 +43,6 @@ public class MedicProfitPage extends JFrame {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Close the current window
                 dispose();
             }
         });
@@ -54,10 +53,10 @@ public class MedicProfitPage extends JFrame {
         contentPane.add(monthTextField);
         contentPane.add(new JLabel("Year:"));
         contentPane.add(yearTextField);
-        contentPane.add(new JLabel()); // Empty label for spacing
+        contentPane.add(new JLabel());
         contentPane.add(calculateProfitButton);
-        contentPane.add(new JLabel()); // Empty label for spacing
-        contentPane.add(backButton); // Add the new back button
+        contentPane.add(new JLabel());
+        contentPane.add(backButton);
 
         setContentPane(contentPane);
         setVisible(true);

@@ -9,7 +9,8 @@ public class HomePageResurseUmane extends JFrame {
     private JPanel contentPane;
     private JButton searchAngajatButton;
     private JButton adaugaAngajatButton;
-    private JButton signOutButton;  // Added Sign Out button
+    private JButton stergereAngajatButton;  // Added Stergere Angajat button
+    private JButton signOutButton;
 
     public HomePageResurseUmane() {
         setTitle("Main Application Page");
@@ -17,12 +18,13 @@ public class HomePageResurseUmane extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        contentPane = new JPanel(new GridLayout(3, 1, 10, 10));
+        contentPane = new JPanel(new GridLayout(4, 1, 10, 10));  // Increased row count to accommodate the new button
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         searchAngajatButton = new JButton("Search Angajat");
         adaugaAngajatButton = new JButton("Adauga Angajat");
-        signOutButton = new JButton("Sign Out");  // Added Sign Out button
+        stergereAngajatButton = new JButton("Stergere Angajat");  // Added Stergere Angajat button
+        signOutButton = new JButton("Sign Out");
 
         searchAngajatButton.addActionListener(new ActionListener() {
             @Override
@@ -38,6 +40,13 @@ public class HomePageResurseUmane extends JFrame {
             }
         });
 
+        stergereAngajatButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openStergereAngajatPage();
+            }
+        });
+
         signOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,7 +56,8 @@ public class HomePageResurseUmane extends JFrame {
 
         contentPane.add(searchAngajatButton);
         contentPane.add(adaugaAngajatButton);
-        contentPane.add(signOutButton);  // Added Sign Out button
+        contentPane.add(stergereAngajatButton);  // Added Stergere Angajat button
+        contentPane.add(signOutButton);
 
         add(contentPane);
         setVisible(true);
@@ -62,6 +72,12 @@ public class HomePageResurseUmane extends JFrame {
         AdaugaAngajat adaugaAngajat = new AdaugaAngajat(this);
         adaugaAngajat.setVisible(true);
         this.setVisible(false);
+    }
+
+    private void openStergereAngajatPage() {
+        dispose();
+        StergereAngajatPage stergereAngajatPage = new StergereAngajatPage();
+        stergereAngajatPage.setVisible(true);
     }
 
     private void handleSignOut() {

@@ -49,4 +49,24 @@ public class AngajatRepository {
             }
         }
     }
+
+    public static void stergeAngajat(int angajatId) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = DatabaseConnection.getConnection();
+            String sql = "DELETE FROM angajati WHERE ID_Angajat = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, angajatId);
+            preparedStatement.executeUpdate();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 }

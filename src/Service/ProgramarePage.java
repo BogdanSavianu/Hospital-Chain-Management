@@ -21,9 +21,8 @@ public class ProgramarePage extends JFrame {
     private JButton adaugaProgramareButton;
     private JButton backButton;
 
-    private int idReceptioner;  // New field to store the idReceptioner
+    private int idReceptioner;
 
-    // Modified constructor to receive the idReceptioner
     public ProgramarePage(JFrame parentFrame, int idReceptioner) {
         this.idReceptioner = idReceptioner;
         initializeComponents();
@@ -36,7 +35,7 @@ public class ProgramarePage extends JFrame {
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayout(11, 2)); // Increased rows for the Back button
+        contentPane.setLayout(new GridLayout(11, 2));
 
         receptionerField = new JTextField();
         numePacientField = new JTextField();
@@ -55,7 +54,7 @@ public class ProgramarePage extends JFrame {
             }
         });
 
-        backButton = new JButton("Back"); // Added Back button
+        backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,7 +62,6 @@ public class ProgramarePage extends JFrame {
             }
         });
 
-        // Auto-fill the receptionerField
         receptionerField.setText(String.valueOf(idReceptioner));
 
         contentPane.add(new JLabel("ID Receptioner:"));
@@ -85,7 +83,7 @@ public class ProgramarePage extends JFrame {
         contentPane.add(new JLabel()); // Placeholder for spacing
         contentPane.add(adaugaProgramareButton);
         contentPane.add(new JLabel()); // Placeholder for spacing
-        contentPane.add(backButton); // Added Back button
+        contentPane.add(backButton);
 
         add(contentPane);
 
@@ -93,7 +91,6 @@ public class ProgramarePage extends JFrame {
     }
 
     private void addProgramare() {
-        // Retrieve data from text fields
         int idReceptioner = Integer.parseInt(receptionerField.getText());
         String numePacient = numePacientField.getText();
         String prenumePacient = prenumePacientField.getText();
@@ -103,7 +100,7 @@ public class ProgramarePage extends JFrame {
         String locatie = locatieField.getText();
         int idServiciu = Integer.parseInt(serviciuField.getText());
 
-        if (OrarGenericService.verificaDisponibilitateMedic(idMedic, dataProgramare, oraProgramare)) {
+        if (OrarGenericService.verificaDisponibilitateMedic(idMedic, dataProgramare, oraProgramare, locatie)) {
             adaugaProgramare(idReceptioner, numePacient, prenumePacient, idMedic, dataProgramare, oraProgramare, locatie, idServiciu);
 
             JOptionPane.showMessageDialog(this, "Programare adaugata cu succes!");
@@ -112,19 +109,19 @@ public class ProgramarePage extends JFrame {
         }
 
         this.dispose();
-        new HomePage(idReceptioner).setVisible(true);  // Pass idReceptioner to the new instance of HomePage
+        new HomePage(idReceptioner).setVisible(true);
     }
 
     private void goBack() {
         dispose();
-        new HomePage(idReceptioner).setVisible(true);  // Pass idReceptioner to the new instance of HomePage
+        new HomePage(idReceptioner).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                int receptionistId = 123;  // Replace with the actual id of the receptionist
+                int receptionistId = 123;
                 new ProgramarePage(new HomePage(receptionistId), receptionistId);
             }
         });

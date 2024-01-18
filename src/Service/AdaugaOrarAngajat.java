@@ -15,8 +15,7 @@ public class AdaugaOrarAngajat extends JFrame {
     private JButton adaugaOrarButton;
     private JButton backButton;
 
-    private int idAngajat;  // To store the id of the angajat for whom the schedule is being added
-
+    private int idAngajat;
     public AdaugaOrarAngajat(JFrame parent, int idAngajat) {
         this.idAngajat = idAngajat;
 
@@ -34,7 +33,9 @@ public class AdaugaOrarAngajat extends JFrame {
                 {"Marti", "", "", ""},
                 {"Miercuri", "", "", ""},
                 {"Joi", "", "", ""},
-                {"Vineri", "", "", ""}
+                {"Vineri", "", "", ""},
+                {"Sambata", "", "", ""},
+                {"Duminica", "", "", ""}
         };
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames);

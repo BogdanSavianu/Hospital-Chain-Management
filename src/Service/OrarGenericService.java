@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrarGenericService {
-    public static boolean verificaDisponibilitateMedic(int idMedic, String dataProgramare, int oraProgramare) {
+    public static boolean verificaDisponibilitateMedic(int idMedic, String dataProgramare, int oraProgramare, String Locatie) {
         try {
             Connection connection = DatabaseConnection.getConnection();
 
@@ -28,21 +28,20 @@ public class OrarGenericService {
 
             String romanianDayName = programareDate.getDayOfWeek().name();
 
-
-
-                String query = "SELECT * FROM orar_generic WHERE ID_angajat = ? AND zi = ? AND orar_generic.ora_incepere <= ? AND orar_generic.ora_sfarsire >= ?";
+            String query = "SELECT * FROM orar_generic WHERE ID_angajat = ? AND zi = ? AND orar_generic.ora_incepere <= ? AND orar_generic.ora_sfarsire >= ? AND ? = orar_generic.locatia";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, idMedic);
                 preparedStatement.setString(2, romanianDayName);
                 preparedStatement.setInt(3, oraProgramare);
-                preparedStatement.setInt(4, oraProgramare);
+                preparedStatement.setInt(4, oraProgramare+1);
+                preparedStatement.setString(5,Locatie);
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
                         return true;
                     } else {
-                        System.out.println("Medic is not available at the specified date or time.");
+                        System.out.println("Medic is not available at the specified date, time or location.");
                         return false;
                     }
                 }
