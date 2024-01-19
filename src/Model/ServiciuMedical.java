@@ -4,7 +4,7 @@ public class ServiciuMedical {
     private int idServiciu;
     private String numeServiciu;
     private String specialitate;
-    private boolean necesitaCompetenta;
+    //private boolean necesitaCompetenta;
     private double pret;
     private int durataMinute;
     private int idMedic;
@@ -33,14 +33,6 @@ public class ServiciuMedical {
         this.specialitate = specialitate;
     }
 
-    public boolean isNecesitaCompetenta() {
-        return necesitaCompetenta;
-    }
-
-    public void setNecesitaCompetenta(boolean necesitaCompetenta) {
-        this.necesitaCompetenta = necesitaCompetenta;
-    }
-
     public double getPret() {
         return pret;
     }
@@ -65,14 +57,12 @@ public class ServiciuMedical {
         this.idMedic = idMedic;
     }
 
-    public ServiciuMedical(int idServiciu, String numeServiciu, String specialitate, boolean necesitaCompetenta, double pret, int durataMinute, int idMedic) {
+    public ServiciuMedical(Integer idServiciu, String numeServiciu, String specialitate, Double pret, Integer durataMinute) {
         this.idServiciu = idServiciu;
         this.numeServiciu = numeServiciu;
         this.specialitate = specialitate;
-        this.necesitaCompetenta = necesitaCompetenta;
         this.pret = pret;
         this.durataMinute = durataMinute;
-        this.idMedic = idMedic;
     }
 
     public ServiciuMedical() {

@@ -21,7 +21,6 @@ public class AngajatRepository {
             } else if ("specific".equals(tipOrar)) {
                 query = "CALL AdaugaOrarPentruAngajat(?, ?, ?, ?, ?, 'specific')";
             } else {
-                // Handle invalid tipOrar value
                 throw new IllegalArgumentException("Invalid tipOrar value: " + tipOrar);
             }
 
@@ -34,9 +33,8 @@ public class AngajatRepository {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle or log the exception according to your needs
+            e.printStackTrace();
         } finally {
-            // Close resources in a finally block
             try {
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -45,7 +43,7 @@ public class AngajatRepository {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace(); // Handle or log the exception according to your needs
+                e.printStackTrace();
             }
         }
     }

@@ -27,10 +27,8 @@ public class ViewProgramariPage extends JFrame {
         contentPane = new JPanel(new BorderLayout());
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Fetch appointments data from the database
         Vector<Vector<Object>> data = getAppointmentsData(idReceptioner);
 
-        // Column names for the table
         Vector<String> columnNames = new Vector<>();
         columnNames.add("ID Programare");
         columnNames.add("ID Receptioner");
@@ -89,7 +87,6 @@ public class ViewProgramariPage extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // Replace with the actual id of the employee
                 int receptionistId = 123;
                 new ViewProgramariPage(receptionistId);
             }

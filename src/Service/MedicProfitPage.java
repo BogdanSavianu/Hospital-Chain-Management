@@ -68,7 +68,7 @@ public class MedicProfitPage extends JFrame {
             int month = Integer.parseInt(monthTextField.getText());
             int year = Integer.parseInt(yearTextField.getText());
 
-            BigDecimal profit = ProfitCalculator.calculateMedicProfit(medicId, month, year);
+            Double profit = ProfitCalculator.calculateMedicProfit(medicId, month, year);
 
             JOptionPane.showMessageDialog(this, "Medic Profit: " + profit, "Profit Result", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {

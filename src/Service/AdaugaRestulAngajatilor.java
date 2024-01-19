@@ -19,24 +19,26 @@ public class AdaugaRestulAngajatilor extends JFrame {
     private JTextField ibanField;
     private JTextField nrContractField;
     private JTextField dataAngajariiField;
-    private JTextField functieField; // New field for Functie
+    private JTextField functieField;
     private JComboBox<String> tipAdministratorComboBox;
     private JTextField salarField;
-    private JTextField oreContractField; // New field for Ore Contract
+    private JTextField oreContractField;
     private JButton adaugaAngajatButton;
     private JButton backButton;
 
-    private String angajatType;  // To store the type of angajat selected
+    private Integer id;
 
-    public AdaugaRestulAngajatilor(JFrame parent, String angajatType) {
+    private String angajatType;
+
+    public AdaugaRestulAngajatilor(JFrame parent, String angajatType, Integer idResurseUmane) {
         this.angajatType = angajatType;
-
+        this.id = idResurseUmane;
         setTitle("Adauga " + angajatType);
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(parent);
 
-        contentPane = new JPanel(new GridLayout(16, 2, 10, 10)); // Adjusted the grid layout for the new field
+        contentPane = new JPanel(new GridLayout(16, 2, 10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         cnpField = new JTextField();
@@ -133,7 +135,7 @@ public class AdaugaRestulAngajatilor extends JFrame {
             JOptionPane.showMessageDialog(this, angajatType + " adaugat cu succes!");
 
             dispose();
-            AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, angajatId);
+            AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, angajatId, id);
             adaugaOrarAngajat.setVisible(true);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid numeric input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -144,14 +146,14 @@ public class AdaugaRestulAngajatilor extends JFrame {
 
     private void goBack() {
         dispose();
-        new AdaugaAngajat(null).setVisible(true);
+        new AdaugaAngajat(null, id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AdaugaRestulAngajatilor(null, "Tip Angajat").setVisible(true);
+                new AdaugaRestulAngajatilor(null, "Tip Angajat", 1).setVisible(true);
             }
         });
     }

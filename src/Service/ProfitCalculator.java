@@ -11,25 +11,25 @@ import java.sql.Types;
 public class ProfitCalculator {
 
     public static class ProfitResult {
-        private final BigDecimal totalSalaries;
-        private final BigDecimal totalServicePrices;
-        private final BigDecimal profit;
+        private final Double totalSalaries;
+        private final Double totalServicePrices;
+        private final Double profit;
 
-        public ProfitResult(BigDecimal totalSalaries, BigDecimal totalServicePrices, BigDecimal profit) {
+        public ProfitResult(Double totalSalaries, Double totalServicePrices, Double profit) {
             this.totalSalaries = totalSalaries;
             this.totalServicePrices = totalServicePrices;
             this.profit = profit;
         }
 
-        public BigDecimal getTotalSalaries() {
+        public Double getTotalSalaries() {
             return totalSalaries;
         }
 
-        public BigDecimal getTotalServicePrices() {
+        public Double getTotalServicePrices() {
             return totalServicePrices;
         }
 
-        public BigDecimal getProfit() {
+        public Double getProfit() {
             return profit;
         }
     }
@@ -45,9 +45,9 @@ public class ProfitCalculator {
 
                 statement.execute();
 
-                BigDecimal totalSalaries = statement.getBigDecimal(1);
-                BigDecimal totalServicePrices = statement.getBigDecimal(2);
-                BigDecimal profit = statement.getBigDecimal(3);
+                Double totalSalaries = statement.getDouble(1);
+                Double totalServicePrices = statement.getDouble(2);
+                Double profit = statement.getDouble(3);
 
                 return new ProfitResult(totalSalaries, totalServicePrices, profit);
             }
@@ -57,8 +57,8 @@ public class ProfitCalculator {
         }
     }
 
-    public static BigDecimal calculateMedicProfit(int medicId, int month, int year) {
-        BigDecimal profit = BigDecimal.ZERO;
+    public static Double calculateMedicProfit(int medicId, int month, int year) {
+        Double profit = 0.0;
 
         try {
             Connection connection = DatabaseConnection.getConnection();
@@ -71,7 +71,7 @@ public class ProfitCalculator {
 
                 statement.execute();
 
-                profit = statement.getBigDecimal(4);
+                profit = statement.getDouble(4);
             }
         } catch (SQLException e) {
             e.printStackTrace();

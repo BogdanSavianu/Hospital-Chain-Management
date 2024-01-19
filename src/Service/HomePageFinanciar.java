@@ -8,20 +8,25 @@ import java.awt.event.ActionListener;
 public class HomePageFinanciar extends JFrame {
     private JPanel contentPane;
     private JButton viewProfitButton;
-    private JButton viewMedicProfitButton; // New button for viewing Medic Profit
+    private JButton viewMedicProfitButton;
+    private JButton veziSalariiButton;
+    private JButton viewPersonalInfoButton;
     private JButton signOutButton;
 
-    public HomePageFinanciar() {
+    private Integer id;
+
+    public HomePageFinanciar(Integer id) {
+        this.id = id;
         initializeComponents();
     }
 
     private void initializeComponents() {
         setTitle("Financiar Home Page");
-        setSize(400, 200);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        contentPane = new JPanel(new GridLayout(4, 1, 10, 10)); // Increase rows to accommodate the new button
+        contentPane = new JPanel(new GridLayout(6, 1, 10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         viewProfitButton = new JButton("View Profit Information");
@@ -32,11 +37,27 @@ public class HomePageFinanciar extends JFrame {
             }
         });
 
-        viewMedicProfitButton = new JButton("View Medic Profit"); // New button
+        viewMedicProfitButton = new JButton("View Medic Profit");
         viewMedicProfitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openMedicProfitPage();
+            }
+        });
+
+        veziSalariiButton = new JButton("Vezi Salarii");
+        veziSalariiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSalariiViewPage();
+            }
+        });
+
+        viewPersonalInfoButton = new JButton("View Personal Info");
+        viewPersonalInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openViewOwnInfoPage();
             }
         });
 
@@ -49,7 +70,9 @@ public class HomePageFinanciar extends JFrame {
         });
 
         contentPane.add(viewProfitButton);
-        contentPane.add(viewMedicProfitButton); // Add the new button
+        contentPane.add(viewMedicProfitButton);
+        contentPane.add(veziSalariiButton);
+        contentPane.add(viewPersonalInfoButton);
         contentPane.add(signOutButton);
 
         setContentPane(contentPane);
@@ -62,9 +85,37 @@ public class HomePageFinanciar extends JFrame {
     }
 
     private void openMedicProfitPage() {
-        // Open the MedicProfitPage
         MedicProfitPage medicProfitPage = new MedicProfitPage();
         medicProfitPage.setVisible(true);
+    }
+
+    private void openSalariiViewPage() {
+        String angajatIdInput = JOptionPane.showInputDialog(
+                this,
+                "Enter the ID of the angajat:",
+                "Enter Angajat ID",
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (angajatIdInput != null && !angajatIdInput.isEmpty()) {
+            try {
+                int angajatId = Integer.parseInt(angajatIdInput);
+                SalariiView salariiViewPage = new SalariiView(angajatId);
+                salariiViewPage.setVisible(true);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Invalid input. Please enter a valid numeric ID.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    private void openViewOwnInfoPage() {
+        ViewOwnInfo viewOwnInfo = new ViewOwnInfo(id);
+        viewOwnInfo.setVisible(true);
     }
 
     private void handleSignOut() {
@@ -86,6 +137,6 @@ public class HomePageFinanciar extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new HomePageFinanciar());
+        SwingUtilities.invokeLater(() -> new HomePageFinanciar(25));
     }
 }

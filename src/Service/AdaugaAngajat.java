@@ -14,7 +14,10 @@ public class AdaugaAngajat extends JFrame {
     private JButton medicButton;
     private JButton backButton;
 
-    public AdaugaAngajat(JFrame parent) {
+    private int id;
+
+    public AdaugaAngajat(JFrame parent, Integer id) {
+        this.id = id;
         setTitle("Adauga Angajat");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +66,7 @@ public class AdaugaAngajat extends JFrame {
             }
         });
 
-        backButton = new JButton("Back");  // Initializing Back button
+        backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,30 +88,30 @@ public class AdaugaAngajat extends JFrame {
     private void addAngajat(String angajatType) {
         if ("Medic".equals(angajatType)) {
             dispose();
-            AdaugaMedic adaugaMedic = new AdaugaMedic(this);
+            AdaugaMedic adaugaMedic = new AdaugaMedic(this, id);
             adaugaMedic.setVisible(true);
 
         } else if ("Asistent Medical".equals(angajatType)) {
             dispose();
-            AdaugaAsistentMedical adaugaAsistentMedical = new AdaugaAsistentMedical(this);
+            AdaugaAsistentMedical adaugaAsistentMedical = new AdaugaAsistentMedical(this, id);
             adaugaAsistentMedical.setVisible(true);
         } else {
             dispose();
-            AdaugaRestulAngajatilor adaugaRestulAngajatilor = new AdaugaRestulAngajatilor(this, angajatType);
+            AdaugaRestulAngajatilor adaugaRestulAngajatilor = new AdaugaRestulAngajatilor(this, angajatType, id);
             adaugaRestulAngajatilor.setVisible(true);
         }
     }
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AdaugaAngajat(null).setVisible(true);
+                new AdaugaAngajat(null, 1).setVisible(true);
             }
         });
     }

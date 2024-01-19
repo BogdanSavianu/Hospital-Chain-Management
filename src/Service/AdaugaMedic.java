@@ -36,7 +36,10 @@ public class AdaugaMedic extends JFrame {
     private JButton adaugaMedicButton;
     private JButton backButton;
 
-    public AdaugaMedic(JFrame parent) {
+    private Integer id;
+
+    public AdaugaMedic(JFrame parent, Integer id) {
+        this.id = id;
         setTitle("Adauga Medic");
         setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -179,8 +182,8 @@ public class AdaugaMedic extends JFrame {
             JOptionPane.showMessageDialog(this, "Medic adaugat cu succes!");
 
             dispose();
-            Integer id = MedicRepository.getLastMedicId();
-            AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, id);
+            Integer idMedic = MedicRepository.getLastMedicId();
+            AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, idMedic, id);
             adaugaOrarAngajat.setVisible(true);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid numeric input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -192,14 +195,14 @@ public class AdaugaMedic extends JFrame {
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AdaugaMedic(null).setVisible(true);
+                new AdaugaMedic(null, 1).setVisible(true);
             }
         });
     }

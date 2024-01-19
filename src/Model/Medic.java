@@ -1,14 +1,14 @@
 package Model;
 
 public class Medic {
-    private int idMedic;
-    private int idAngajat;
+    private Integer idMedic;
+    private Integer idAngajat;
     private String specializare;
     private String grad;
     private String codParafa;
     private String competente;
     private String titluStiintific;
-    private double procentComision;
+    private Double procentComision;
     private String postDidactic;
 
     public int getIdMedic() {
@@ -83,7 +83,7 @@ public class Medic {
         this.postDidactic = postDidactic;
     }
 
-    public Medic(int idMedic, int idAngajat, String specializare, String grad, String codParafa, String competente, String titluStiintific, double procentComision, String postDidactic) {
+    public Medic(Integer idMedic, Integer idAngajat, String specializare, String grad, String codParafa, String competente, String titluStiintific, Double procentComision, String postDidactic) {
         this.idMedic = idMedic;
         this.idAngajat = idAngajat;
         this.specializare = specializare;
@@ -93,6 +93,9 @@ public class Medic {
         this.titluStiintific = titluStiintific;
         this.procentComision = procentComision;
         this.postDidactic = postDidactic;
+    }
+    public String toString() {
+        return String.valueOf(idAngajat);
     }
 
     public Medic() {

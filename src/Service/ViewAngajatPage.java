@@ -12,9 +12,11 @@ public class ViewAngajatPage extends JFrame {
     private JPanel contentPane;
     private JTextField angajatIdField;
     private JButton searchButton;
-    private JButton backButton;  // Added Back button
+    private JButton backButton;
+    private Integer id;
 
-    public ViewAngajatPage() {
+    public ViewAngajatPage(Integer id) {
+        this.id = id;
         setTitle("Search Angajat");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +27,7 @@ public class ViewAngajatPage extends JFrame {
 
         angajatIdField = new JTextField();
         searchButton = new JButton("Search");
-        backButton = new JButton("Back");  // Initializing Back button
+        backButton = new JButton("Back");
 
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -76,14 +78,14 @@ public class ViewAngajatPage extends JFrame {
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ViewAngajatPage();
+                new ViewAngajatPage(1);
             }
         });
     }

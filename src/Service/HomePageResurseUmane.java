@@ -9,21 +9,27 @@ public class HomePageResurseUmane extends JFrame {
     private JPanel contentPane;
     private JButton searchAngajatButton;
     private JButton adaugaAngajatButton;
-    private JButton stergereAngajatButton;  // Added Stergere Angajat button
+    private JButton stergereAngajatButton;
+    private JButton viewPersonalInfoButton;
+    private JButton adaugaConcediuButton;
     private JButton signOutButton;
+    private Integer id;
 
-    public HomePageResurseUmane() {
+    public HomePageResurseUmane(Integer id) {
+        this.id = id;
         setTitle("Main Application Page");
-        setSize(400, 200);
+        setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        contentPane = new JPanel(new GridLayout(4, 1, 10, 10));  // Increased row count to accommodate the new button
+        contentPane = new JPanel(new GridLayout(6, 1, 10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         searchAngajatButton = new JButton("Search Angajat");
         adaugaAngajatButton = new JButton("Adauga Angajat");
-        stergereAngajatButton = new JButton("Stergere Angajat");  // Added Stergere Angajat button
+        stergereAngajatButton = new JButton("Stergere Angajat");
+        viewPersonalInfoButton = new JButton("View Personal Info");
+        adaugaConcediuButton = new JButton("Adauga Concediu"); // New button
         signOutButton = new JButton("Sign Out");
 
         searchAngajatButton.addActionListener(new ActionListener() {
@@ -47,6 +53,20 @@ public class HomePageResurseUmane extends JFrame {
             }
         });
 
+        viewPersonalInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openViewOwnInfoPage();
+            }
+        });
+
+        adaugaConcediuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openAdaugaConcediuPage();
+            }
+        });
+
         signOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,7 +76,9 @@ public class HomePageResurseUmane extends JFrame {
 
         contentPane.add(searchAngajatButton);
         contentPane.add(adaugaAngajatButton);
-        contentPane.add(stergereAngajatButton);  // Added Stergere Angajat button
+        contentPane.add(stergereAngajatButton);
+        contentPane.add(viewPersonalInfoButton);
+        contentPane.add(adaugaConcediuButton);
         contentPane.add(signOutButton);
 
         add(contentPane);
@@ -64,20 +86,30 @@ public class HomePageResurseUmane extends JFrame {
     }
 
     private void openSearchAngajatPage() {
-        ViewAngajatPage viewAngajatPage = new ViewAngajatPage();
+        ViewAngajatPage viewAngajatPage = new ViewAngajatPage(id);
         viewAngajatPage.setVisible(true);
     }
 
     private void openAdaugaAngajatPage() {
-        AdaugaAngajat adaugaAngajat = new AdaugaAngajat(this);
+        AdaugaAngajat adaugaAngajat = new AdaugaAngajat(this, id);
         adaugaAngajat.setVisible(true);
         this.setVisible(false);
     }
 
     private void openStergereAngajatPage() {
         dispose();
-        StergereAngajatPage stergereAngajatPage = new StergereAngajatPage();
+        StergereAngajatPage stergereAngajatPage = new StergereAngajatPage(id);
         stergereAngajatPage.setVisible(true);
+    }
+
+    private void openViewOwnInfoPage() {
+        ViewOwnInfo viewOwnInfo = new ViewOwnInfo(id);
+        viewOwnInfo.setVisible(true);
+    }
+
+    private void openAdaugaConcediuPage() {
+        ConcediuPage concediuPage = new ConcediuPage(id);
+        concediuPage.setVisible(true);
     }
 
     private void handleSignOut() {
@@ -89,7 +121,7 @@ public class HomePageResurseUmane extends JFrame {
         );
 
         if (result == JOptionPane.YES_OPTION) {
-            dispose();
+            this.dispose();
             Login login = new Login();
             login.setSize(300, 200);
             login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,11 +131,6 @@ public class HomePageResurseUmane extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new HomePageResurseUmane();
-            }
-        });
+        SwingUtilities.invokeLater(() -> new HomePageResurseUmane(1));
     }
 }

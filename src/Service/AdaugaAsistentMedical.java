@@ -27,11 +27,14 @@ public class AdaugaAsistentMedical extends JFrame {
     private JTextField salarField;
     private JTextField tipAsistentField;
     private JTextField gradField;
-    private JTextField oreContractField; // New field for Ore Contract
+    private JTextField oreContractField;
     private JButton adaugaAsistentMedicalButton;
     private JButton backButton;
 
-    public AdaugaAsistentMedical(JFrame parent) {
+    private Integer id;
+
+    public AdaugaAsistentMedical(JFrame parent, Integer id) {
+        this.id = id;
         setTitle("Adauga Asistent Medical");
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,9 +108,9 @@ public class AdaugaAsistentMedical extends JFrame {
         contentPane.add(gradField);
         contentPane.add(new JLabel("Ore Contract:"));
         contentPane.add(oreContractField);
-        contentPane.add(new JLabel()); // Placeholder for spacing
+        contentPane.add(new JLabel());
         contentPane.add(adaugaAsistentMedicalButton);
-        contentPane.add(new JLabel()); // Placeholder for spacing
+        contentPane.add(new JLabel());
         contentPane.add(backButton);
 
         add(contentPane);
@@ -134,11 +137,11 @@ public class AdaugaAsistentMedical extends JFrame {
         int oreContract = Integer.parseInt(oreContractField.getText());
 
             try {
-                int id = adaugaUtilizatorSiAsistentMedical(cnp, nume, prenume, parola, adresa, telefon, email, iban, nrContract, dataAngajarii, functie, tipAdministrator, salar, tipAsistent, grad, oreContract);
+                int idAdd = adaugaUtilizatorSiAsistentMedical(cnp, nume, prenume, parola, adresa, telefon, email, iban, nrContract, dataAngajarii, functie, tipAdministrator, salar, tipAsistent, grad, oreContract);
 
                 JOptionPane.showMessageDialog(this, "Asistent Medical adaugat cu succes!");
                 dispose();
-                AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, id);
+                AdaugaOrarAngajat adaugaOrarAngajat = new AdaugaOrarAngajat(this, idAdd, id);
                 adaugaOrarAngajat.setVisible(true);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Invalid numeric input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -147,19 +150,19 @@ public class AdaugaAsistentMedical extends JFrame {
             }
 
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AdaugaAsistentMedical(null).setVisible(true);
+                new AdaugaAsistentMedical(null, 1).setVisible(true);
             }
         });
     }

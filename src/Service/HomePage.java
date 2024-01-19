@@ -9,22 +9,23 @@ public class HomePage extends JFrame {
     private JPanel contentPane;
     private JButton adaugaRaportButton;
     private JButton adaugaProgramareButton;
-    private JButton viewAppointmentsButton;  // New button for viewing all appointments
+    private JButton viewAppointmentsButton;
+    private JButton veziPacientiButton;
+    private JButton veziSalariiButton;
+    private JButton viewPersonalInfoButton;
     private JButton signOutButton;
     private JLabel label;
+    private int idReceptioner;
+    private String role;
 
-    private int idReceptioner;  // New field to store the idReceptioner
-    private String role;  // New field to store the role of the employee
-
-    // Modified constructor to receive the idReceptioner and role
     public HomePage(int idReceptioner, String role) {
         this.idReceptioner = idReceptioner;
         this.role = role;
         initializeComponents();
     }
 
-    public HomePage(int idReceptioner){
-        this.idReceptioner=idReceptioner;
+    public HomePage(int idReceptioner) {
+        this.idReceptioner = idReceptioner;
         initializeComponents();
     }
 
@@ -52,7 +53,6 @@ public class HomePage extends JFrame {
             }
         });
 
-        // Create the viewAppointmentsButton and set its visibility based on the role
         viewAppointmentsButton = new JButton("Vezi programarile");
         viewAppointmentsButton.addActionListener(new ActionListener() {
             @Override
@@ -62,6 +62,30 @@ public class HomePage extends JFrame {
         });
         viewAppointmentsButton.setVisible("Administrator".equals(role) || "SuperAdministrator".equals(role));
 
+        veziPacientiButton = new JButton("Vezi Pacienti");
+        veziPacientiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openPacientiViewPage();
+            }
+        });
+
+        veziSalariiButton = new JButton("Vezi Salarii");
+        veziSalariiButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSalariiViewPage();
+            }
+        });
+
+        viewPersonalInfoButton = new JButton("View Personal Info");
+        viewPersonalInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openViewOwnInfoPage();
+            }
+        });
+
         signOutButton = new JButton("Sign Out");
         signOutButton.addActionListener(new ActionListener() {
             @Override
@@ -70,12 +94,15 @@ public class HomePage extends JFrame {
             }
         });
 
-        contentPane = new JPanel(new GridLayout(4, 1, 10, 10));
+        contentPane = new JPanel(new GridLayout(7, 1, 10, 10));
         contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         contentPane.add(adaugaRaportButton);
         contentPane.add(adaugaProgramareButton);
         contentPane.add(viewAppointmentsButton);
+        contentPane.add(veziPacientiButton);
+        contentPane.add(veziSalariiButton);
+        contentPane.add(viewPersonalInfoButton);
         contentPane.add(signOutButton);
         contentPane.add(label);
 
@@ -101,6 +128,20 @@ public class HomePage extends JFrame {
         viewAppointmentsPage.setVisible(true);
     }
 
+    private void openPacientiViewPage() {
+        PacientView pacientiViewPage = new PacientView();
+        pacientiViewPage.setVisible(true);
+    }
+
+    private void openSalariiViewPage() {
+        SalariiView salariiViewPage = new SalariiView(idReceptioner);
+        salariiViewPage.setVisible(true);
+    }
+
+    private void openViewOwnInfoPage() {
+        ViewOwnInfo viewOwnInfo = new ViewOwnInfo(idReceptioner);
+        viewOwnInfo.setVisible(true);
+    }
 
     private void handleSignOut() {
         int result = JOptionPane.showConfirmDialog(

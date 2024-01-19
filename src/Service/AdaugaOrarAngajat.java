@@ -15,9 +15,11 @@ public class AdaugaOrarAngajat extends JFrame {
     private JButton adaugaOrarButton;
     private JButton backButton;
 
+    private int idResurseUmane;
     private int idAngajat;
-    public AdaugaOrarAngajat(JFrame parent, int idAngajat) {
+    public AdaugaOrarAngajat(JFrame parent, int idAngajat, Integer idResurseUmane) {
         this.idAngajat = idAngajat;
+        this.idResurseUmane = idResurseUmane;
 
         setTitle("Adauga Orar Angajat");
         setSize(400, 300);
@@ -104,14 +106,14 @@ public class AdaugaOrarAngajat extends JFrame {
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(idResurseUmane).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new AdaugaOrarAngajat(null, 1).setVisible(true);
+                new AdaugaOrarAngajat(null, 1, 1).setVisible(true);
             }
         });
     }

@@ -75,11 +75,13 @@ public class Login extends JFrame {
                             dispose();
                             Angajat angajat = UtilizatoriRepository.searchAngajat(userId);
                             if(angajat != null && angajat.getTipFunctie().equals("Receptioner"))
-                                new HomePage(angajat.getIdAngajat()).setVisible(true);
+                                new HomePage(angajat.getIdUtilizator()).setVisible(true);
                             else if(angajat!=null && angajat.getTipFunctie().equals("Inspector Resurse Umane"))
-                                new HomePageResurseUmane().setVisible(true);
+                                new HomePageResurseUmane(angajat.getIdUtilizator()).setVisible(true);
                             else if(angajat!=null && angajat.getTipFunctie().equalsIgnoreCase("Expert Financiar Contabil"))
-                                new HomePageFinanciar().setVisible(true);
+                                new HomePageFinanciar(angajat.getIdUtilizator()).setVisible(true);
+                            else if(angajat!=null && (angajat.getTipFunctie().equals("Medic")||angajat.getTipFunctie().equals("Asistent Medical")))
+                                new HomePageMedicAndAsistent(angajat.getIdUtilizator());
                         }
                     } else {
                         JOptionPane.showMessageDialog(Login.this, "User not found", "Error", JOptionPane.ERROR_MESSAGE);

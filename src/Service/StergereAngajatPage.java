@@ -13,8 +13,10 @@ public class StergereAngajatPage extends JFrame {
     private JTextField angajatIdTextField;
     private JButton deleteAngajatButton;
     private JButton backButton;
+    private Integer id;
 
-    public StergereAngajatPage() {
+    public StergereAngajatPage(Integer id) {
+        this.id = id;
         initializeComponents();
     }
 
@@ -68,10 +70,10 @@ public class StergereAngajatPage extends JFrame {
 
     private void goBack() {
         dispose();
-        new HomePageResurseUmane().setVisible(true);
+        new HomePageResurseUmane(id).setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new StergereAngajatPage());
+        SwingUtilities.invokeLater(() -> new StergereAngajatPage(1));
     }
 }

@@ -21,16 +21,16 @@ public class DateConsultatie extends JFrame {
     private JTextField recomandariTextField;
     private JTextField parafaTextField;
 
-    private int id;  // New field to store the id
+    private int id;
 
     public DateConsultatie(JFrame parent, int id) {
-        this.id = id;  // Store the id
+        this.id = id;
 
         setTitle("Consultation Form Page");
         setSize(600, 475);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        idAsistentTextField = new JTextField(String.valueOf(id));  // Set the id as the default value
+        idAsistentTextField = new JTextField(String.valueOf(id));
         idPacientTextField = new JTextField(10);
         cnpPacientTextField = new JTextField(13);
         idProgramareTextField = new JTextField(10);
@@ -116,9 +116,11 @@ public class DateConsultatie extends JFrame {
 
             adaugaConsultatie(idPacient, cnpPacient, idAsistent, idProgramare, simptome, investigatii, diagnostic, recomandari, parafa);
 
-            JOptionPane.showMessageDialog(this, "Consultation added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            ConsultatieService.adaugaBonForConsultatie(idProgramare);
+
+            JOptionPane.showMessageDialog(this, "Consultation and Bon added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
-            new HomePage(id).setVisible(true);  // Pass the id to the new instance of HomePage
+            new HomePage(id).setVisible(true);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Invalid numeric input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
@@ -128,14 +130,13 @@ public class DateConsultatie extends JFrame {
 
     private void goBack() {
         dispose();
-        new HomePage(id).setVisible(true);  // Pass the id to the new instance of HomePage
+        new HomePage(id).setVisible(true);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // Replace 123 with the actual id
                 new DateConsultatie(null, 123).setVisible(true);
             }
         });
