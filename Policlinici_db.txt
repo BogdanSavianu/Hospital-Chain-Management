@@ -1,0 +1,774 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema proiect_policlinici
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema proiect_policlinici
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `proiect_policlinici` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `proiect_policlinici` ;
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`utilizatori`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`utilizatori` (
+  `ID_Utilizator` INT NOT NULL AUTO_INCREMENT,
+  `CNP` VARCHAR(13) NOT NULL,
+  `Nume` VARCHAR(45) NOT NULL,
+  `Prenume` VARCHAR(45) NOT NULL,
+  `Adresa` VARCHAR(90) NULL DEFAULT NULL,
+  `Telefon` VARCHAR(14) NULL DEFAULT NULL,
+  `Email` VARCHAR(50) NOT NULL,
+  `IBAN` VARCHAR(25) NULL DEFAULT NULL,
+  `Numar_Contract` INT NOT NULL,
+  `Data_Angajarii` DATE NULL DEFAULT NULL,
+  `Functie` ENUM('Inspector Resurse Umane', 'Expert Financiar Contabil', 'Receptioner', 'Asistent Medical', 'Medic') NOT NULL,
+  `TipAdministrator` ENUM('Administrator', 'SuperAdministrator') NULL DEFAULT 'Administrator',
+  `Parola` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID_Utilizator`),
+  UNIQUE INDEX `CNP` (`CNP` ASC) VISIBLE,
+  UNIQUE INDEX `Email` (`Email` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Utilizator_UNIQUE` (`ID_Utilizator` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 26
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`angajati`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`angajati` (
+  `ID_Angajat` INT NOT NULL AUTO_INCREMENT,
+  `ID_Utilizator` INT NOT NULL,
+  `Salariu_Negociat` DECIMAL(10,2) NULL DEFAULT NULL,
+  `Ore_Realizate` INT NULL DEFAULT NULL,
+  `Tip_Functie` ENUM('Inspector Resurse Umane', 'Expert Financiar Contabil', 'Receptioner', 'Asistent Medical', 'Medic') NOT NULL,
+  `Data_Inceput` DATE NULL DEFAULT NULL,
+  `Ore_Contract` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_Angajat`),
+  UNIQUE INDEX `ID_Angajat_UNIQUE` (`ID_Angajat` ASC) VISIBLE,
+  UNIQUE INDEX `ID_Utilizator_UNIQUE` (`ID_Utilizator` ASC) VISIBLE,
+  INDEX `ID_Utilizator` (`ID_Utilizator` ASC) VISIBLE,
+  CONSTRAINT `angajati_ibfk_1`
+    FOREIGN KEY (`ID_Utilizator`)
+    REFERENCES `proiect_policlinici`.`utilizatori` (`ID_Utilizator`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 22
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`asistenti_medicali`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`asistenti_medicali` (
+  `ID_Asistent_Medical` INT NOT NULL AUTO_INCREMENT,
+  `ID_Angajat` INT NULL DEFAULT NULL,
+  `Tip_Asistent` ENUM('Generalist', 'Laborator', 'Radiologie') NOT NULL,
+  `Grad` ENUM('Principal', 'Secundar') NOT NULL,
+  PRIMARY KEY (`ID_Asistent_Medical`),
+  UNIQUE INDEX `asistenti_medicali_pk` (`ID_Angajat` ASC) VISIBLE,
+  INDEX `ID_Angajat` (`ID_Angajat` ASC) VISIBLE,
+  CONSTRAINT `asistenti_medicali_ibfk_1`
+    FOREIGN KEY (`ID_Angajat`)
+    REFERENCES `proiect_policlinici`.`angajati` (`ID_Angajat`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`autentificare`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`autentificare` (
+  `ID_Utilizator` INT NOT NULL,
+  `Parola` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID_Utilizator`),
+  UNIQUE INDEX `autentificare_pk` (`ID_Utilizator` ASC) VISIBLE,
+  INDEX `ID_Utilizator` (`ID_Utilizator` ASC) VISIBLE,
+  CONSTRAINT `autentificare_ibfk_1`
+    FOREIGN KEY (`ID_Utilizator`)
+    REFERENCES `proiect_policlinici`.`utilizatori` (`ID_Utilizator`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`bonuri`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`bonuri` (
+  `ID_Consult` INT NOT NULL AUTO_INCREMENT,
+  `ID_Serviciu` INT NOT NULL,
+  PRIMARY KEY (`ID_Consult`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`concedii`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`concedii` (
+  `ID_Concediu` INT NOT NULL AUTO_INCREMENT,
+  `ID_Angajat` INT NULL DEFAULT NULL,
+  `Data_Inceput` DATE NULL DEFAULT NULL,
+  `Data_Sfarsit` DATE NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_Concediu`),
+  INDEX `ID_Angajat` (`ID_Angajat` ASC) VISIBLE,
+  CONSTRAINT `concedii_ibfk_1`
+    FOREIGN KEY (`ID_Angajat`)
+    REFERENCES `proiect_policlinici`.`angajati` (`ID_Utilizator`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`medici`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`medici` (
+  `ID_Medic` INT NOT NULL AUTO_INCREMENT,
+  `ID_Angajat` INT NULL DEFAULT NULL,
+  `Specializare` VARCHAR(45) NULL DEFAULT NULL,
+  `Grad` ENUM('Specialist', 'Primar') NOT NULL,
+  `Cod_Parafa` VARCHAR(20) NULL DEFAULT NULL,
+  `Competente` TEXT NULL DEFAULT NULL,
+  `Titlu_Stiintific` ENUM('Doctorand', 'Doctor in stiinte medicale') NULL DEFAULT NULL,
+  `Procent_Comision` DECIMAL(5,2) NULL DEFAULT NULL,
+  `Post_Didactic` ENUM('Preparator', 'Asistent', 'Lector', 'Conferentiar', 'Profesor') NULL DEFAULT NULL,
+  PRIMARY KEY (`ID_Medic`),
+  INDEX `ID_Angajat` (`ID_Angajat` ASC) VISIBLE,
+  CONSTRAINT `medici___fk`
+    FOREIGN KEY (`ID_Angajat`)
+    REFERENCES `proiect_policlinici`.`angajati` (`ID_Utilizator`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 25
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`servicii_medicale`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`servicii_medicale` (
+  `ID_Serviciu` INT NOT NULL AUTO_INCREMENT,
+  `Nume_Serviciu` VARCHAR(90) NOT NULL,
+  `Specializare` VARCHAR(45) NOT NULL,
+  `Pret` DECIMAL(10,2) NOT NULL,
+  `Durata_Minute` INT NOT NULL,
+  PRIMARY KEY (`ID_Serviciu`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`programari`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`programari` (
+  `ID_Programare` INT NOT NULL AUTO_INCREMENT,
+  `ID_Receptioner` INT NOT NULL,
+  `ID_Pacient` INT NOT NULL,
+  `ID_Medic` INT NOT NULL,
+  `Data_Programare` DATE NULL DEFAULT NULL,
+  `Ora_Programare` INT NULL DEFAULT NULL,
+  `Durata_Consulta` INT NULL DEFAULT NULL,
+  `Locatie` VARCHAR(45) NULL DEFAULT NULL,
+  `ID_Serviciu` INT NULL DEFAULT NULL,
+  `Nume_Pacient` VARCHAR(45) NOT NULL,
+  `Prenume_Pacient` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID_Programare`),
+  INDEX `ID_Receptioner` (`ID_Receptioner` ASC) VISIBLE,
+  INDEX `ID_Medic` (`ID_Medic` ASC) VISIBLE,
+  INDEX `ID_Serviciu` (`ID_Serviciu` ASC) VISIBLE,
+  INDEX `ID_Pacient` (`ID_Pacient` ASC) VISIBLE,
+  CONSTRAINT `programari_ibfk_1`
+    FOREIGN KEY (`ID_Receptioner`)
+    REFERENCES `proiect_policlinici`.`angajati` (`ID_Angajat`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `programari_ibfk_3`
+    FOREIGN KEY (`ID_Medic`)
+    REFERENCES `proiect_policlinici`.`medici` (`ID_Angajat`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `programari_ibfk_4`
+    FOREIGN KEY (`ID_Serviciu`)
+    REFERENCES `proiect_policlinici`.`servicii_medicale` (`ID_Serviciu`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `programari_ibfk_5`
+    FOREIGN KEY (`ID_Serviciu`)
+    REFERENCES `proiect_policlinici`.`servicii_medicale` (`ID_Serviciu`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 12
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`pacient`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`pacient` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `CNP` VARCHAR(13) NULL DEFAULT NULL,
+  `Nume` VARCHAR(30) NULL DEFAULT NULL,
+  `Prenume` VARCHAR(30) NULL DEFAULT NULL,
+  `Istoric` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `ID` (`ID` ASC) VISIBLE,
+  UNIQUE INDEX `pacient_pk` (`ID` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 10
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`consultatii`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`consultatii` (
+  `ID_Raport` INT NOT NULL AUTO_INCREMENT,
+  `ID_Asistent_Medical` INT NULL DEFAULT NULL,
+  `ID_Medic` INT NULL DEFAULT NULL,
+  `ID_Pacient` INT NULL DEFAULT NULL,
+  `Data_Consultatie` DATE NULL DEFAULT NULL,
+  `Istoric` TEXT NULL DEFAULT NULL,
+  `Simptome` TEXT NULL DEFAULT NULL,
+  `Investigatii` TEXT NULL DEFAULT NULL,
+  `Diagnostic` TEXT NULL DEFAULT NULL,
+  `Recomandari` TEXT NULL DEFAULT NULL,
+  `Parafa` VARCHAR(20) NOT NULL,
+  `ID_Programare` INT NOT NULL,
+  PRIMARY KEY (`ID_Raport`),
+  INDEX `ID_Asistent_Medical` (`ID_Asistent_Medical` ASC) VISIBLE,
+  INDEX `ID_Medic` (`ID_Medic` ASC) VISIBLE,
+  INDEX `ID_Pacient` (`ID_Pacient` ASC) VISIBLE,
+  INDEX `consultatii_ibfk_4` (`ID_Programare` ASC) VISIBLE,
+  CONSTRAINT `consultatii_ibfk_2`
+    FOREIGN KEY (`ID_Medic`)
+    REFERENCES `proiect_policlinici`.`medici` (`ID_Medic`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `consultatii_ibfk_4`
+    FOREIGN KEY (`ID_Programare`)
+    REFERENCES `proiect_policlinici`.`programari` (`ID_Programare`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `consultatii_ibfk_5`
+    FOREIGN KEY (`ID_Pacient`)
+    REFERENCES `proiect_policlinici`.`pacient` (`ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 16
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`orar_generic`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`orar_generic` (
+  `zi` VARCHAR(9) NULL DEFAULT NULL,
+  `ora_incepere` INT NULL DEFAULT NULL,
+  `ora_sfarsire` INT NULL DEFAULT NULL,
+  `locatia` VARCHAR(90) NULL DEFAULT NULL,
+  `ID_orar` INT NOT NULL AUTO_INCREMENT,
+  `ID_angajat` INT NOT NULL,
+  PRIMARY KEY (`ID_orar`),
+  UNIQUE INDEX `ID_orar_UNIQUE` (`ID_orar` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 9
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `proiect_policlinici`.`orar_specific`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `proiect_policlinici`.`orar_specific` (
+  `zi` VARCHAR(9) NULL DEFAULT NULL,
+  `ora_incepere` INT NULL DEFAULT NULL,
+  `ora_sfarsire` INT NULL DEFAULT NULL,
+  `locatia` VARCHAR(90) NULL DEFAULT NULL,
+  `ID_orar` INT NOT NULL AUTO_INCREMENT,
+  `ID_angajat` INT NOT NULL,
+  PRIMARY KEY (`ID_orar`),
+  UNIQUE INDEX `ID_angajat_UNIQUE` (`ID_angajat` ASC) VISIBLE,
+  UNIQUE INDEX `ID_orar_UNIQUE` (`ID_orar` ASC) VISIBLE,
+  CONSTRAINT `orar_specific_angajat`
+    FOREIGN KEY (`ID_angajat`)
+    REFERENCES `proiect_policlinici`.`angajati` (`ID_Angajat`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+USE `proiect_policlinici` ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaOrarPentruAngajat
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaOrarPentruAngajat`(IN p_ID_Angajat int, IN p_Zi varchar(9),
+                                                               IN p_Ora_Incepere int, IN p_Ora_Sfarsire int,
+                                                               IN p_Locatia varchar(90),
+                                                               IN p_Tip_Orar enum ('generic', 'specific'))
+BEGIN
+    DECLARE v_ID_Orar INT;
+
+    IF p_Tip_Orar = 'generic' THEN
+        INSERT INTO `proiect_policlinici`.`orar_generic` (zi, ora_incepere, ora_sfarsire, locatia, ID_angajat)
+        VALUES (p_Zi, p_Ora_Incepere, p_Ora_Sfarsire, p_Locatia, p_ID_Angajat);
+
+        SET v_ID_Orar = LAST_INSERT_ID();
+    ELSEIF p_Tip_Orar = 'specific' THEN
+        INSERT INTO `proiect_policlinici`.`orar_specific` (zi, ora_incepere, ora_sfarsire, locatia, ID_angajat)
+        VALUES (p_Zi, p_Ora_Incepere, p_Ora_Sfarsire, p_Locatia, p_ID_Angajat);
+
+        SET v_ID_Orar = LAST_INSERT_ID();
+    END IF;
+
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaPacient
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaPacient`(
+    IN p_Nume varchar(30),
+    IN p_Prenume varchar(30)
+)
+BEGIN
+    INSERT INTO pacient (Nume, Prenume) VALUES (p_Nume, p_Prenume);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaProgramare
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaProgramare`(IN p_ID_Receptioner INT, IN p_Nume_Pacient VARCHAR(45),
+                                                        IN p_Prenume_Pacient VARCHAR(45), IN p_ID_Medic INT,
+                                                        IN p_Data_Programare DATE, IN p_Ora_Programare INT,
+                                                        IN p_Locatie VARCHAR(45), IN p_ID_Serviciu INT)
+BEGIN
+    DECLARE v_ID_Pacient INT;
+
+    INSERT INTO pacient (Nume, Prenume)
+    VALUES (p_Nume_Pacient, p_Prenume_Pacient);
+
+    SET v_ID_Pacient = LAST_INSERT_ID();
+
+    INSERT INTO programari (
+        ID_Receptioner,
+        ID_Pacient,
+        Nume_Pacient,
+        Prenume_Pacient,
+        ID_Medic,
+        Data_Programare,
+        Ora_Programare,
+        Locatie,
+        ID_Serviciu
+    )
+    VALUES (
+        p_ID_Receptioner,
+        v_ID_Pacient,  
+        p_Nume_Pacient,
+        p_Prenume_Pacient,
+        p_ID_Medic,
+        p_Data_Programare,
+        p_Ora_Programare,
+        p_Locatie,
+        p_ID_Serviciu
+    );
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaRaportMedical
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaRaportMedical`(IN p_ID_Pacient int, IN p_CNP_Pacient varchar(13),
+                                                           IN p_ID_Asistent_Medical int, IN p_ID_Programare int,
+                                                           IN p_Simptome text, IN p_Investigatii text,
+                                                           IN p_Diagnostic text, IN p_Recomandari text,
+                                                           IN p_Parafa varchar(45))
+BEGIN
+    DECLARE v_Data_Programare DATE;
+    DECLARE v_ID_Medic INT;
+
+    SELECT Data_Programare, ID_Medic INTO v_Data_Programare, v_ID_Medic
+    FROM programari
+    WHERE ID_Programare = p_ID_Programare;
+
+    INSERT INTO consultatii (
+        ID_Asistent_Medical, ID_Medic, ID_Pacient, ID_Programare, Data_Consultatie,
+        Simptome, Investigatii, Diagnostic, Recomandari, Parafa
+    )
+    VALUES (
+        p_ID_Asistent_Medical, v_ID_Medic, p_ID_Pacient, p_ID_Programare, v_Data_Programare,
+        p_Simptome, p_Investigatii, p_Diagnostic, p_Recomandari, p_Parafa
+    );
+
+    UPDATE pacient
+    SET CNP = p_CNP_Pacient
+    WHERE ID = p_ID_Pacient;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaUtilizator
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaUtilizator`(IN p_CNP varchar(13), IN p_Nume varchar(45),
+                                                        IN p_Prenume varchar(45), IN p_Adresa varchar(90),
+                                                        IN p_Telefon varchar(14), IN p_Email varchar(50),
+                                                        IN p_Parola varchar(45), IN p_IBAN varchar(25),
+                                                        IN p_Numar_Contract int, IN p_Data_Angajarii date,
+                                                        IN p_Functie enum ('Inspector Resurse Umane', 'Expert Financiar Contabil', 'Receptioner', 'Asistent Medical', 'Medic'),
+                                                        IN p_TipAdministrator enum ('Administrator', 'SuperAdministrator'),
+                                                        IN p_Salar decimal(10, 2), IN p_Ore_Contract int)
+BEGIN
+    INSERT INTO `proiect_policlinici`.`utilizatori` (CNP, Nume, Prenume, Adresa, Telefon, Email, Parola, IBAN, Numar_Contract, Data_Angajarii, Functie, TipAdministrator)
+    VALUES (p_CNP, p_Nume, p_Prenume, p_Adresa, p_Telefon, p_Email, p_Parola, p_IBAN, p_Numar_Contract, p_Data_Angajarii, p_Functie, p_TipAdministrator);
+
+    SET @ID_Utilizator = LAST_INSERT_ID();
+
+    INSERT INTO `proiect_policlinici`.`angajati` (ID_Utilizator, Tip_Functie, Data_Inceput,Salariu_Negociat, Ore_Contract)
+    VALUES (@ID_Utilizator, p_Functie, p_Data_Angajarii,p_Salar, p_Ore_Contract);
+
+    INSERT INTO `proiect_policlinici`.`autentificare` (ID_Utilizator, Parola, email) VALUES (@ID_Utilizator,p_Parola,p_Email);
+
+    IF p_Functie = 'Asistent Medical' THEN
+        INSERT INTO `proiect_policlinici`.`asistenti_medicali` (ID_Angajat)
+        VALUES (@ID_Utilizator);
+    ELSEIF p_Functie = 'Medic' THEN
+        INSERT INTO `proiect_policlinici`.`medici` (ID_Angajat)
+        VALUES (@ID_Utilizator);
+    END IF;
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaUtilizatorSiAsistentMedical
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaUtilizatorSiAsistentMedical`(IN p_CNP varchar(13), IN p_Nume varchar(45),
+                                                                         IN p_Prenume varchar(45),
+                                                                         IN p_Adresa varchar(90),
+                                                                         IN p_Parola varchar(45),
+                                                                         IN p_Telefon varchar(14),
+                                                                         IN p_Email varchar(50), IN p_IBAN varchar(25),
+                                                                         IN p_Numar_Contract int,
+                                                                         IN p_Data_Angajarii date,
+                                                                         IN p_Functie enum ('Inspector Resurse Umane', 'Expert Financiar Contabil', 'Receptioner', 'Asistent Medical', 'Medic'),
+                                                                         IN p_TipAdministrator enum ('Administrator', 'SuperAdministrator'),
+                                                                         IN p_Salar decimal(10, 2),
+                                                                         IN p_Tip_Asistent enum ('Generalist', 'Laborator', 'Radiologie'),
+                                                                         IN p_Grad enum ('Principal', 'Secundar'),
+                                                                         IN p_Ore_Contract int)
+BEGIN
+    DECLARE v_ID_Utilizator INT;
+
+    CALL AdaugaUtilizator(
+        p_CNP, p_Nume, p_Prenume, p_Adresa, p_Telefon, p_Email, p_Parola, p_IBAN, p_Numar_Contract,
+        p_Data_Angajarii, p_Functie, p_TipAdministrator, p_Salar, p_Ore_Contract
+    );
+
+    SET v_ID_Utilizator = LAST_INSERT_ID();
+    INSERT INTO `proiect_policlinici`.`autentificare` (ID_Utilizator, Parola, email) VALUES (v_ID_Utilizator, p_Parola, p_Email);
+
+    IF p_Functie = 'Asistent Medical' THEN
+        INSERT INTO asistenti_medicali (ID_Angajat, Tip_Asistent, Grad)
+        VALUES (v_ID_Utilizator, p_Tip_Asistent, p_Grad);
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure AdaugaUtilizatorSiMedic
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AdaugaUtilizatorSiMedic`(IN p_CNP varchar(13), IN p_Nume varchar(45),
+                                                               IN p_Prenume varchar(45), IN p_Adresa varchar(90),
+                                                               IN p_Telefon varchar(14), IN p_Email varchar(50),
+                                                               IN p_Parola varchar(45), IN p_IBAN varchar(25),
+                                                               IN p_Numar_Contract int, IN p_Data_Angajarii date,
+                                                               IN p_Functie enum ('Inspector Resurse Umane', 'Expert Financiar Contabil', 'Receptioner', 'Asistent Medical', 'Medic'),
+                                                               IN p_TipAdministrator enum ('Administrator', 'SuperAdministrator'),
+                                                               IN p_Salar decimal(10, 2), IN p_Specializare varchar(45),
+                                                               IN p_Grad enum ('Specialist', 'Primar'),
+                                                               IN p_Cod_Parafa varchar(20), IN p_Competente text,
+                                                               IN p_Titlu_Stiintific enum ('Doctorand', 'Doctor in stiinte medicale'),
+                                                               IN p_Procent_Comision decimal(5, 2),
+                                                               IN p_Post_Didactic enum ('Preparator', 'Asistent', 'Lector', 'Conferentiar', 'Profesor'),
+                                                               IN p_Ore_Contract int)
+BEGIN
+    DECLARE v_ID_Utilizator INT;
+
+    CALL AdaugaUtilizator(
+        p_CNP, p_Nume, p_Prenume, p_Adresa, p_Telefon, p_Email, p_Parola,p_IBAN, p_Numar_Contract,
+        p_Data_Angajarii, p_Functie, p_TipAdministrator, p_Salar, p_Ore_Contract
+    );
+
+    SET v_ID_Utilizator = LAST_INSERT_ID();
+    
+    #INSERT INTO `proiect_policlinici`.`autentificare` (ID_Utilizator, Parola, email) VALUES (v_ID_Utilizator,p_Parola,p_Email);
+
+    IF p_Functie = 'Medic' THEN
+        Insert into medici(ID_Medic, ID_Angajat, Specializare, Grad, Cod_Parafa, Competente, Titlu_Stiintific, Procent_Comision, Post_Didactic) values (
+            v_ID_Utilizator, v_ID_Utilizator, p_Specializare, p_Grad, p_Cod_Parafa,
+            p_Competente, p_Titlu_Stiintific, p_Procent_Comision, p_Post_Didactic
+        );
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure CalculeazaProfitMedic
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculeazaProfitMedic`(IN p_medicID INT, IN p_month INT, IN p_year INT,
+                                                             OUT p_profit DECIMAL(10, 2))
+BEGIN
+    SELECT SUM(s.Pret) - (MAX(a.Salariu_Negociat) * (MAX(a.Ore_Realizate) / MAX(a.Ore_Contract))) INTO p_profit
+    FROM consultatii c
+    JOIN programari p ON c.ID_Programare = p.ID_Programare
+    JOIN servicii_medicale s ON p.ID_Serviciu = s.ID_Serviciu
+    JOIN angajati a ON c.ID_Medic = a.ID_Angajat
+    WHERE MONTH(p.Data_Programare) = p_month AND YEAR(p.Data_Programare) = p_year
+    AND a.ID_Angajat = p_medicID;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure CalculeazaProfitPoliclinica
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculeazaProfitPoliclinica`(OUT p_TotalSalaries decimal(10, 2),
+                                                                   OUT p_TotalServicePrices decimal(10, 2),
+                                                                   OUT p_Profit decimal(10, 2))
+BEGIN
+    SELECT SUM(a.Salariu_Negociat) INTO p_TotalSalaries
+    FROM angajati a;
+
+    SELECT SUM(sm.Pret) INTO p_TotalServicePrices
+    FROM consultatii c
+    JOIN programari p ON c.ID_Programare = p.ID_Programare
+    JOIN servicii_medicale sm ON p.ID_Serviciu = sm.ID_Serviciu;
+
+    SET p_Profit = p_TotalServicePrices - p_TotalSalaries;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure GetLastMedic
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetLastMedic`()
+BEGIN
+    DECLARE lastMedicId INT;
+
+    SELECT MAX(ID_Medic) INTO lastMedicId FROM medici;
+
+    SELECT *
+    FROM medici
+    WHERE ID_Medic = lastMedicId;
+
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure GetUserByIDAndPassword
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByIDAndPassword`(IN p_ID_Utilizator int, IN p_Parola varchar(255))
+BEGIN
+    DECLARE NumRows INT;
+
+    SELECT COUNT(*) INTO NumRows
+    FROM autentificare
+    WHERE ID_Utilizator = p_ID_Utilizator AND Parola = p_Parola;
+
+    IF NumRows > 0 THEN
+        SELECT u.ID_Utilizator, u.CNP, u.Nume, u.Prenume, u.Adresa, u.Telefon, u.Email, u.IBAN, u.Numar_Contract,
+               u.Data_Angajarii, u.Functie, u.TipAdministrator, u.Parola
+        FROM utilizatori u
+        WHERE u.ID_Utilizator = p_ID_Utilizator;
+
+    ELSE
+        SELECT NULL AS ID_Utilizator, NULL AS CNP, NULL AS Nume, NULL AS Prenume, NULL AS Adresa,
+               NULL AS Telefon, NULL AS Email, NULL AS IBAN, NULL AS Numar_Contract,
+               NULL AS Data_Angajarii, NULL AS Functie, NULL AS TipAdministrator, NULL AS Parola
+        FROM dual
+        WHERE 1 = 0;
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure SalarMedic
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SalarMedic`(IN medicID int)
+BEGIN
+    DECLARE done BOOLEAN DEFAULT FALSE;
+    DECLARE servicePrice DECIMAL(10, 2);
+    DECLARE totalAmount DECIMAL(10, 2) DEFAULT 0;
+
+    DECLARE cur CURSOR FOR SELECT ID_Serviciu FROM programari WHERE ID_Medic = medicID;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+
+    my_loop: LOOP
+        FETCH cur INTO servicePrice;
+
+        IF done THEN
+            LEAVE my_loop;
+        END IF;
+
+        SET totalAmount = totalAmount + servicePrice;
+    END LOOP;
+
+    CLOSE cur;
+     Set totalAmount = totalAmount*100;
+    SELECT totalAmount AS TotalAmount;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure StergeUtilizatorSiRelatii
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `StergeUtilizatorSiRelatii`(IN p_ID_Utilizator int)
+BEGIN
+    DELETE FROM `proiect_policlinici`.`consultatii`
+    WHERE ID_Pacient = p_ID_Utilizator;
+
+    DELETE FROM `proiect_policlinici`.`programari`
+    WHERE ID_Pacient = p_ID_Utilizator;
+
+    DELETE FROM `proiect_policlinici`.`asistenti_medicali`
+    WHERE ID_Angajat = p_ID_Utilizator;
+    
+    DELETE FROM `proiect_policlinici`.`medici`
+    WHERE ID_Medic = p_ID_Utilizator;
+
+    DELETE FROM `proiect_policlinici`.`angajati`
+    WHERE ID_Utilizator = p_ID_Utilizator;
+
+    DELETE FROM `proiect_policlinici`.`autentificare`
+    WHERE ID_Utilizator = p_ID_Utilizator;
+
+    DELETE FROM `proiect_policlinici`.`utilizatori`
+    WHERE ID_Utilizator = p_ID_Utilizator;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure UpdateMedic
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `proiect_policlinici`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateMedic`(
+    IN p_ID_Medic INT,
+    IN p_ID_Angajat INT,
+    IN p_Specializare VARCHAR(45),
+    IN p_Grad ENUM('Specialist', 'Primar'),
+    IN p_Cod_Parafa VARCHAR(20),
+    IN p_Competente TEXT,
+    IN p_Titlu_Stiintific ENUM('Doctorand', 'Doctor in stiinte medicale'),
+    IN p_Procent_Comision DECIMAL(5, 2),
+    IN p_Post_Didactic ENUM('Preparator', 'Asistent', 'Lector', 'Conferentiar', 'Profesor')
+)
+BEGIN
+    UPDATE medici
+    SET
+        ID_Angajat = p_ID_Angajat,
+        Specializare = p_Specializare,
+        Grad = p_Grad,
+        Cod_Parafa = p_Cod_Parafa,
+        Competente = p_Competente,
+        Titlu_Stiintific = p_Titlu_Stiintific,
+        Procent_Comision = p_Procent_Comision,
+        Post_Didactic = p_Post_Didactic
+    WHERE ID_Medic = p_ID_Medic;
+END$$
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
